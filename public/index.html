@@ -92,7 +92,7 @@ header{padding:clamp(48px,9vw,96px) 0 0;text-align:center}
 }
 .tagline{
   font-size:clamp(19px,2.6vw,25px);line-height:1.45;color:var(--ink2);
-  max-width:34ch;margin:0 auto;text-wrap:balance;
+  max-width:34ch;margin:0 auto;text-wrap:balance;font-weight:400;
 }
 .tagline strong{color:var(--ink);font-weight:640}
 .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:clamp(28px,4vw,38px) 0 0}
@@ -177,8 +177,8 @@ footer p{max-width:60ch}
 
   <div class="rule"></div>
 
-  <p class="tagline">Open FPGA data acquisition for
-  <strong>closed-loop neuroscience</strong>.</p>
+  <h1 class="tagline">Open FPGA data acquisition for
+  <strong>closed-loop neuroscience</strong>.</h1>
 
   <div class="cta">
     <a class="btn" href="https://github.com/glanceneuro">Browse the code</a>
@@ -202,10 +202,12 @@ footer p{max-width:60ch}
 
 <section>
   <h2>What it is</h2>
-  <p class="lead">GLANCE records from Intan RHD2000-style neural chips on a
-  MicroZed (Xilinx Zynq-7020) with a custom carrier board. The programmable logic
-  talks to up to two cables of amplifiers over a DDR SPI protocol; the processor
-  streams the data to your host over gigabit Ethernet.</p>
+  <p class="lead">GLANCE — <em>Gigabit Low-latency Acquisition for Neuroscience
+  and Closed-loop Experiments</em> — is an open-source electrophysiology system.
+  It records from Intan RHD2000-style neural chips on a MicroZed (Xilinx
+  Zynq-7020) with a custom carrier board: the programmable logic talks to up to
+  two cables of amplifiers over a DDR SPI protocol, and the processor streams the
+  data to your host over gigabit Ethernet.</p>
 
   <p>It is built for experiments that have to <em>react</em>. Every 30 kHz sample
   leaves the board as its own UDP datagram — never batched, never held for a
