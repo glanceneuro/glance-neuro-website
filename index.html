@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>GLANCE — open FPGA acquisition for closed-loop neuroscience</title>
+<meta name="description" content="GLANCE is an open-source FPGA data-acquisition system for Intan RHD2000 neural recording chips: 256 channels at 30 kS/s, one UDP datagram per sample, with on-FPGA LFP extraction, stimulus playback and headstage motion tracking. From the Kemere Lab at Rice University.">
+
+<!-- ONE canonical domain. If you make .com canonical instead, change this line
+     and the og:url below, and point the redirects the other way. -->
+<link rel="canonical" href="https://glanceneuro.org/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://glanceneuro.org/">
+<meta property="og:title" content="GLANCE — open FPGA acquisition for closed-loop neuroscience">
+<meta property="og:description" content="256 channels at 30 kS/s, one UDP datagram per sample. On-FPGA LFP extraction, stimulus playback and headstage motion tracking. Open hardware and firmware from the Kemere Lab at Rice University.">
+<meta property="og:image" content="https://glanceneuro.org/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "GLANCE",
+  "alternateName": "Gigabit Low-latency Acquisition for Neuroscience & Closed-loop Experiments",
+  "url": "https://glanceneuro.org/",
+  "codeRepository": "https://github.com/glanceneuro",
+  "description": "Open-source FPGA data-acquisition system for Intan RHD2000-style neural recording chips: 256 channels at 30 kS/s over gigabit Ethernet, one UDP datagram per sample, with on-FPGA LFP extraction, DAC stimulus playback and headstage motion tracking.",
+  "applicationCategory": "Scientific instrument",
+  "keywords": "neural recording, electrophysiology, FPGA, Intan RHD2000, closed-loop neuroscience, Zynq, open hardware, Open Ephys, local field potential",
+  "license": "https://opensource.org/licenses/MIT",
+  "author": {
+    "@type": "Organization",
+    "name": "Kemere Lab, Rice University",
+    "url": "https://kemerelab.com"
+  }
+}
+</script>
+
+<style>
+:root{
+  --navy:#1a3a6e; --navy-2:#2a5296;
+  --bg:#f7f8fa; --paper:#fff; --line:#e1e6ed;
+  --ink:#10141c; --ink2:#55606f;
+  --accent:#0c6d85; --accent-soft:#e4f2f5;
+  --code-bg:#eef1f5;
+  --spectrum:linear-gradient(90deg,#00b4d8,#52b788,#ffd166,#f4845f,#e5383b,#d81e5b,#7209b7);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --navy:#7ba3dd; --navy-2:#a8c4e8;
+    --bg:#0b0e14; --paper:#131822; --line:#232b38;
+    --ink:#e8ecf2; --ink2:#97a3b5;
+    --accent:#4cc9e0; --accent-soft:#10262c;
+    --code-bg:#1a212c;
+  }
+}
+:root[data-theme="light"]{
+  --navy:#1a3a6e; --navy-2:#2a5296;
+  --bg:#f7f8fa; --paper:#fff; --line:#e1e6ed;
+  --ink:#10141c; --ink2:#55606f;
+  --accent:#0c6d85; --accent-soft:#e4f2f5; --code-bg:#eef1f5;
+}
+:root[data-theme="dark"]{
+  --navy:#7ba3dd; --navy-2:#a8c4e8;
+  --bg:#0b0e14; --paper:#131822; --line:#232b38;
+  --ink:#e8ecf2; --ink2:#97a3b5;
+  --accent:#4cc9e0; --accent-soft:#10262c; --code-bg:#1a212c;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:17px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.mono,code,.spec .v{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.wrap{max-width:1040px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+p{margin:0 0 18px;max-width:68ch}
+a{color:var(--accent);text-underline-offset:2px}
+
+/* ---------- hero ---------- */
+header{padding:clamp(48px,9vw,96px) 0 0;text-align:center}
+.logo{width:min(660px,88%);height:auto;margin:0 auto;display:block}
+.rule{
+  height:4px;border-radius:2px;background:var(--spectrum);
+  width:min(660px,88%);margin:clamp(26px,4vw,40px) auto clamp(24px,3.5vw,34px);
+}
+.tagline{
+  font-size:clamp(19px,2.6vw,25px);line-height:1.45;color:var(--ink2);
+  max-width:34ch;margin:0 auto;text-wrap:balance;
+}
+.tagline strong{color:var(--ink);font-weight:640}
+.cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:clamp(28px,4vw,38px) 0 0}
+.btn{
+  display:inline-block;padding:11px 22px;border-radius:8px;text-decoration:none;
+  font-size:15.5px;font-weight:600;border:1px solid var(--navy);
+  background:var(--navy);color:var(--bg);transition:transform .12s ease;
+}
+.btn.ghost{background:transparent;color:var(--navy);}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ---------- spec strip ---------- */
+.specs{
+  display:grid;gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;margin:clamp(48px,7vw,80px) 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+}
+.spec{background:var(--paper);padding:20px 22px}
+.spec .v{
+  font-size:clamp(23px,3vw,29px);font-weight:600;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;color:var(--navy);display:block;
+}
+.spec .k{
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink2);margin-top:5px;display:block;
+}
+
+/* ---------- sections ---------- */
+section{padding:clamp(52px,8vw,88px) 0 0}
+h2{
+  font-size:clamp(22px,3vw,29px);margin:0 0 20px;letter-spacing:-.022em;
+  font-weight:700;text-wrap:balance;
+}
+h2::before{
+  content:"";display:block;width:52px;height:3px;border-radius:2px;
+  background:var(--spectrum);margin-bottom:16px;
+}
+.lead{font-size:18.5px}
+
+/* ---------- feature grid ---------- */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));margin-top:26px}
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px 24px;
+}
+.card h3{font-size:16.5px;margin:0 0 9px;letter-spacing:-.008em;font-weight:660}
+.card p{font-size:15px;color:var(--ink2);margin:0;max-width:none}
+.card .tag{
+  display:inline-block;font-family:ui-monospace,monospace;font-size:11.5px;
+  color:var(--accent);background:var(--accent-soft);border-radius:5px;
+  padding:2px 7px;margin-bottom:11px;
+}
+
+/* ---------- repos ---------- */
+.repos{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));margin-top:26px}
+.repo{
+  display:block;background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  padding:22px 24px;text-decoration:none;color:inherit;transition:border-color .14s ease;
+}
+.repo:hover,.repo:focus-visible{border-color:var(--navy)}
+.repo .n{font-family:ui-monospace,monospace;font-size:14.5px;font-weight:600;color:var(--navy)}
+.repo .d{font-size:14.5px;color:var(--ink2);margin-top:8px;display:block}
+.repo .l{
+  font-family:ui-monospace,monospace;font-size:11.5px;color:var(--ink2);
+  margin-top:12px;display:block;letter-spacing:.03em;
+}
+
+/* ---------- footer ---------- */
+footer{
+  margin-top:clamp(60px,9vw,104px);border-top:1px solid var(--line);
+  padding:32px 0 64px;color:var(--ink2);font-size:15px;
+}
+footer p{max-width:60ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="logo-darkmode.png">
+    <img class="logo" src="logo.png" width="2244" height="724"
+         alt="GLANCE — Gigabit Low-latency Acquisition for Neuroscience and Closed-loop Experiments">
+  </picture>
+
+  <div class="rule"></div>
+
+  <p class="tagline">Open FPGA data acquisition for
+  <strong>closed-loop neuroscience</strong>.</p>
+
+  <div class="cta">
+    <a class="btn" href="https://github.com/glanceneuro">Browse the code</a>
+    <a class="btn ghost" href="https://github.com/glanceneuro/glance-neuro/blob/main/docs/getting-started.md">Getting started</a>
+  </div>
+
+  <div class="specs">
+    <div class="spec"><span class="v">256</span><span class="k">channels</span></div>
+    <div class="spec"><span class="v">30 kS/s</span><span class="k">per channel</span></div>
+    <div class="spec"><span class="v">1</span><span class="k">sample per datagram</span></div>
+    <div class="spec"><span class="v">3</span><span class="k">simultaneous streams</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>What it is</h2>
+  <p class="lead">GLANCE records from Intan RHD2000-style neural chips on a
+  MicroZed (Xilinx Zynq-7020) with a custom carrier board. The programmable logic
+  talks to up to two cables of amplifiers over a DDR SPI protocol; the processor
+  streams the data to your host over gigabit Ethernet.</p>
+
+  <p>It is built for experiments that have to <em>react</em>. Every 30 kHz sample
+  leaves the board as its own UDP datagram — never batched, never held for a
+  bigger packet — so nothing on the acquisition side stands between a spike and
+  your detector. Per-stream sequence numbers make packet loss provable rather
+  than suspected.</p>
+
+  <p>The firmware, the FPGA design, the carrier PCB and the Open Ephys plugin are
+  all open, and all developed in the open.</p>
+</section>
+
+<section>
+  <h2>On the board</h2>
+  <div class="grid">
+
+    <div class="card">
+      <span class="tag">stream 2</span>
+      <h3>LFP extraction in hardware</h3>
+      <p>A two-stage FIR cascade decimates the 30 kHz broadband to a ~3 kHz local
+      field potential band inside the FPGA, arriving as a second stream on the
+      same port — no host-side filtering, no extra cable.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">stream 3</span>
+      <h3>Headstage motion</h3>
+      <p>A BNO055 IMU on each cable rides the freed second data pair over I²C,
+      giving fused orientation, acceleration and rotation stamped with the same
+      master clock as the neural samples — so motion and spikes align with no
+      host-side clock matching.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">analog out</span>
+      <h3>Stimulus playback</h3>
+      <p>Arbitrary waveforms out of two on-board SMA connectors via a dual-channel
+      DAC70502, software- or hardware-triggered, looping or one-shot, and driven
+      by the FPGA itself so playback never depends on the network.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">runtime</span>
+      <h3>Reconfigurable fabrics</h3>
+      <p>The board carries several FPGA configurations on its SD card and swaps
+      between them on command, trading a cable's second data pair for the IMU bus
+      when a headstage needs it. It works out what is plugged in and loads the
+      one that fits.</p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>The repositories</h2>
+  <div class="repos">
+
+    <a class="repo" href="https://github.com/glanceneuro/glance-neuro">
+      <span class="n">glance-neuro</span>
+      <span class="d">FPGA design, bare-metal firmware, and a reference Python
+      client for control and diagnostics.</span>
+      <span class="l">MIT</span>
+    </a>
+
+    <a class="repo" href="https://github.com/glanceneuro/glance-neuro-hardware">
+      <span class="n">glance-neuro-hardware</span>
+      <span class="d">KiCad sources for the carrier PCB that the MicroZed plugs
+      into.</span>
+      <span class="l">CERN-OHL-P v2</span>
+    </a>
+
+    <a class="repo" href="https://github.com/glanceneuro/glance-neuro-plugin">
+      <span class="n">glance-neuro-plugin</span>
+      <span class="d">Open Ephys GUI source plugin — broadband, LFP and IMU as
+      three live streams for recording and visualization.</span>
+      <span class="l">GPL-3.0</span>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <p>Built by the <a href="https://kemerelab.com">Kemere Lab</a> at
+  <a href="https://neuroengineering.rice.edu">Rice University</a>.</p>
+  <p>Questions, problems and contributions are welcome on
+  <a href="https://github.com/glanceneuro">GitHub</a>.</p>
+</footer>
+
+</div>
+</body>
+</html>
