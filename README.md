@@ -85,6 +85,31 @@ Rules → Create**, with a wildcard 301 to the canonical host so deep links surv
 | Then | Dynamic redirect, status **301** |
 | Expression | `concat("https://glanceneuro.org", http.request.uri.path)` |
 
+**The rule will not fire until the domain is proxied.** Cloudflare warns about
+this: *"Your DNS configuration may not be proxying traffic for ..., which means
+requests may not match this rule."* Redirect Rules run at Cloudflare's edge, and
+a domain with no DNS records never reaches the edge — it does not resolve at all.
+
+So in each redirect-source zone, **DNS → Records → Add record**, twice:
+
+| Type | Name | Value | Proxy status |
+|---|---|---|---|
+| `AAAA` | `@` | `100::` | **Proxied** (orange cloud) |
+| `AAAA` | `www` | `100::` | **Proxied** (orange cloud) |
+
+`100::` is the IPv6 discard prefix (RFC 6666) — packets sent there are dropped,
+which is the point: nothing should ever reach it. Because the record is
+*proxied*, Cloudflare answers at its edge and runs the redirect before it would
+consider contacting an origin, so the address is never used. An `A` record to
+`192.0.2.1` (RFC 5737 documentation space) behaves the same way.
+
+The orange cloud is what matters. A grey-cloud record hands the visitor the real
+address and bypasses Cloudflare entirely, and the rule never runs.
+
+Universal SSL covers the root and one subdomain level automatically, so both
+hostnames get certificates — which is needed, because `https://glanceneuro.com`
+has to present a valid certificate *before* it can redirect anywhere.
+
 A redirect is right *here* — consolidating domains you own onto one. It is the
 wrong tool for pointing a domain at a GitHub page: a 301 tells Google to index
 the destination instead, so the domain itself would never appear in results.
