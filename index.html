@@ -78,7 +78,7 @@ body{
   font:17px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;
 }
-.mono,code,.spec .v{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.mono,code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
 .wrap{max-width:1040px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
 p{margin:0 0 18px;max-width:68ch}
 a{color:var(--accent);text-underline-offset:2px}
@@ -105,20 +105,12 @@ header{padding:clamp(48px,9vw,96px) 0 0;text-align:center}
 .btn:hover{transform:translateY(-1px)}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
-/* ---------- spec strip ---------- */
-.specs{
-  display:grid;gap:1px;background:var(--line);border:1px solid var(--line);
-  border-radius:12px;overflow:hidden;margin:clamp(48px,7vw,80px) 0 0;
-  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-}
-.spec{background:var(--paper);padding:20px 22px}
-.spec .v{
-  font-size:clamp(23px,3vw,29px);font-weight:600;letter-spacing:-.02em;
-  font-variant-numeric:tabular-nums;color:var(--navy);display:block;
-}
-.spec .k{
-  font-size:12px;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--ink2);margin-top:5px;display:block;
+/* ---------- the one number that matters ---------- */
+.headline{
+  margin:clamp(30px,4.5vw,42px) auto 0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:clamp(20px,3vw,27px);font-weight:600;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;color:var(--navy);
 }
 
 /* ---------- sections ---------- */
@@ -133,18 +125,11 @@ h2::before{
 }
 .lead{font-size:18.5px}
 
-/* ---------- feature grid ---------- */
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));margin-top:26px}
-.card{
-  background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px 24px;
-}
-.card h3{font-size:16.5px;margin:0 0 9px;letter-spacing:-.008em;font-weight:660}
-.card p{font-size:15px;color:var(--ink2);margin:0;max-width:none}
-.card .tag{
-  display:inline-block;font-family:ui-monospace,monospace;font-size:11.5px;
-  color:var(--accent);background:var(--accent-soft);border-radius:5px;
-  padding:2px 7px;margin-bottom:11px;
-}
+/* ---------- feature list ---------- */
+ul.feat{margin:22px 0 0;padding:0 0 0 22px;max-width:68ch}
+ul.feat li{margin:0 0 13px;padding-left:4px}
+ul.feat li::marker{color:var(--navy)}
+ul.feat b{font-weight:640}
 
 /* ---------- repos ---------- */
 .repos{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));margin-top:26px}
@@ -190,12 +175,7 @@ footer p{max-width:60ch}
     <a class="btn ghost" href="https://github.com/glanceneuro/glance-neuro/blob/main/docs/getting-started.md">Getting started</a>
   </div>
 
-  <div class="specs">
-    <div class="spec"><span class="v">256</span><span class="k">channels</span></div>
-    <div class="spec"><span class="v">30 kS/s</span><span class="k">per channel</span></div>
-    <div class="spec"><span class="v">1</span><span class="k">sample per datagram</span></div>
-    <div class="spec"><span class="v">3</span><span class="k">simultaneous streams</span></div>
-  </div>
+  <p class="headline">256 channels at 30 kS/s</p>
 </header>
 
 <section>
@@ -217,43 +197,23 @@ footer p{max-width:60ch}
 
 <section>
   <h2>On the board</h2>
-  <div class="grid">
+  <ul class="feat">
+    <li><b>LFP extraction in hardware</b> — a two-stage FIR cascade decimates the
+    30 kHz broadband to a ~3 kHz band inside the FPGA, arriving as a second
+    stream on the same port.</li>
 
-    <div class="card">
-      <span class="tag">stream 2</span>
-      <h3>LFP extraction in hardware</h3>
-      <p>A two-stage FIR cascade decimates the 30 kHz broadband to a ~3 kHz local
-      field potential band inside the FPGA, arriving as a second stream on the
-      same port — no host-side filtering, no extra cable.</p>
-    </div>
+    <li><b>Headstage motion</b> — a BNO055 IMU on each cable, stamped with the
+    same master clock as the neural samples, so movement and spikes align with no
+    host-side clock matching.</li>
 
-    <div class="card">
-      <span class="tag">stream 3</span>
-      <h3>Headstage motion</h3>
-      <p>A BNO055 IMU on each cable rides the freed second data pair over I²C,
-      giving fused orientation, acceleration and rotation stamped with the same
-      master clock as the neural samples — so motion and spikes align with no
-      host-side clock matching.</p>
-    </div>
+    <li><b>Stimulus playback</b> — arbitrary waveforms out of two on-board SMA
+    connectors, software- or hardware-triggered, driven by the FPGA so playback
+    never depends on the network.</li>
 
-    <div class="card">
-      <span class="tag">analog out</span>
-      <h3>Stimulus playback</h3>
-      <p>Arbitrary waveforms out of two on-board SMA connectors via a dual-channel
-      DAC70502, software- or hardware-triggered, looping or one-shot, and driven
-      by the FPGA itself so playback never depends on the network.</p>
-    </div>
-
-    <div class="card">
-      <span class="tag">runtime</span>
-      <h3>Reconfigurable fabrics</h3>
-      <p>The board carries several FPGA configurations on its SD card and swaps
-      between them on command, trading a cable's second data pair for the IMU bus
-      when a headstage needs it. It works out what is plugged in and loads the
-      one that fits.</p>
-    </div>
-
-  </div>
+    <li><b>Reconfigurable fabrics</b> — the board carries several FPGA
+    configurations on its SD card and loads whichever one matches the headstages
+    actually plugged in.</li>
+  </ul>
 </section>
 
 <section>
