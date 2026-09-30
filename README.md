@@ -7,14 +7,33 @@ in this repo is exactly what gets served.
 index.html        the page (all CSS inline, so one file is the whole design)
 logo.png          light-mode logo, copied from glance-neuro/resources/
 logo-darkmode.png dark-mode logo
+board.jpg         photo of the assembled board  <-- ADD THIS, see below
 favicon.svg
 robots.txt        points at the sitemap
 sitemap.xml       one URL; add more if the site grows
 ```
 
+## Add the board photo
+
+`index.html` references **`board.jpg`** and the page will show a broken image
+until it exists. Save the photo of the MicroZed seated on the carrier into this
+directory under that name.
+
+Two things worth doing to it first:
+
+- **Resize to about 1600 px wide and save as JPEG at ~80% quality.** A phone
+  photo is often 3–8 MB; that is the difference between a page that loads
+  instantly and one that does not, and Google measures it.
+- **Add the real dimensions to the `<img>` tag** — `width="1600" height="1100"`
+  or whatever it actually is. Without them the page reflows when the photo
+  loads. Everything works without this; it is just a little jumpy.
+
+If you would rather use a different filename or a `.webp`, change the `src` in
+`index.html` to match.
+
 ## Deploying on Cloudflare Pages
 
-1. Push this repo to `glanceneuro/website` on GitHub.
+1. Push this repo to `glanceneuro/glance-neuro-website` on GitHub.
 2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
    **Connect to Git**, and pick the repo.
 3. Build settings — the important part:

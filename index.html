@@ -113,6 +113,16 @@ header{padding:clamp(48px,9vw,96px) 0 0;text-align:center}
   font-variant-numeric:tabular-nums;color:var(--navy);
 }
 
+/* ---------- board photo ---------- */
+figure.board{margin:clamp(44px,6.5vw,72px) 0 0}
+figure.board img{
+  display:block;width:100%;height:auto;border-radius:12px;
+  border:1px solid var(--line);
+}
+figure.board figcaption{
+  margin-top:12px;font-size:14.5px;color:var(--ink2);text-align:center;
+}
+
 /* ---------- sections ---------- */
 section{padding:clamp(52px,8vw,88px) 0 0}
 h2{
@@ -177,6 +187,15 @@ footer p{max-width:60ch}
 
   <p class="headline">256 channels at 30 kS/s</p>
 </header>
+
+<figure class="board">
+  <img src="board.jpg" loading="lazy" decoding="async"
+       alt="The GLANCE carrier board: a green PCB with the owl logo in white
+            silkscreen, with a MicroZed system-on-module seated on top carrying
+            the Zynq-7020 chip, gigabit Ethernet, USB-C and two SMA connectors.">
+  <figcaption>A MicroZed seated on the GLANCE carrier. Gigabit Ethernet and
+  USB-C on the left; the two SMA connectors are the stimulus outputs.</figcaption>
+</figure>
 
 <section>
   <h2>What it is</h2>
