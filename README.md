@@ -4,46 +4,66 @@ The GLANCE landing page. Flat HTML — **no build step, no dependencies**. What 
 in this repo is exactly what gets served.
 
 ```
-index.html        the page (all CSS inline, so one file is the whole design)
-logo.png          light-mode logo, copied from glance-neuro/resources/
-logo-darkmode.png dark-mode logo
-board.jpg         photo of the assembled board  <-- ADD THIS, see below
-favicon.svg
-robots.txt        points at the sitemap
-sitemap.xml       one URL; add more if the site grows
+public/           <- everything in here is the website, and nothing else is
+  index.html      the page (all CSS inline, so one file is the whole design)
+  logo.png        light-mode logo, copied from glance-neuro/resources/
+  logo-darkmode.png
+  board.jpg       photo of the assembled board (1600 px, EXIF stripped)
+  board.webp      same photo, ~35% smaller, for browsers that take it
+  favicon.svg
+  robots.txt
+  sitemap.xml
+wrangler.jsonc    only needed for the Workers deploy path; see below
+README.md         this file
 ```
 
-## Add the board photo
+Site files live in `public/` so that this README and `wrangler.jsonc` are not
+served as part of the site.
 
-`index.html` references **`board.jpg`** and the page will show a broken image
-until it exists. Save the photo of the MicroZed seated on the carrier into this
-directory under that name.
+## The board photo
 
-Two things worth doing to it first:
+`public/board.jpg` is 1600 px wide, re-encoded from the 2475 px original. That
+took it from 1.7 MB to 302 KB, and `board.webp` is 197 KB for browsers that
+accept it — the `<picture>` element serves whichever fits.
 
-- **Resize to about 1600 px wide and save as JPEG at ~80% quality.** A phone
-  photo is often 3–8 MB; that is the difference between a page that loads
-  instantly and one that does not, and Google measures it.
-- **Add the real dimensions to the `<img>` tag** — `width="1600" height="1100"`
-  or whatever it actually is. Without them the page reflows when the photo
-  loads. Everything works without this; it is just a little jumpy.
+**The original carried GPS coordinates in its EXIF.** Re-encoding dropped all
+metadata, so the published file does not say where the photo was taken. Worth
+remembering for any phone photo that goes on the site.
 
-If you would rather use a different filename or a `.webp`, change the `src` in
-`index.html` to match.
+The uncompressed original is kept out of the repo. To replace the photo, drop a
+new one in and re-run the resize; if its aspect ratio differs, update
+`width`/`height` on the `<img>` in `index.html` so the page does not reflow as it
+loads.
 
-## Deploying on Cloudflare Pages
+## Deploying on Cloudflare
 
-1. Push this repo to `glanceneuro/glance-neuro-website` on GitHub.
-2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-   **Connect to Git**, and pick the repo.
-3. Build settings — the important part:
-   - **Framework preset:** `None`
-   - **Build command:** *leave empty*
-   - **Build output directory:** `/`
-4. Deploy. You get a `*.pages.dev` URL immediately.
-5. **Custom domains** → add `glanceneuro.org` and `www.glanceneuro.org`. Because
-   the domain is already in your Cloudflare account, the DNS records are created
-   for you; there are no A records to copy and no TLS to configure.
+Cloudflare now offers two ways to host a static site, and its repo-import flow
+defaults to the first. Either works; this repo is set up for both.
+
+### Workers (what the dashboard gives you by default)
+
+Recognisable by a **Deploy command** field pre-filled with `npx wrangler deploy`.
+Leave it as it is, leave **Build command** empty, and let `wrangler.jsonc` do the
+rest — it points at `public/` and declares no Worker code, which is what makes it
+a plain static site.
+
+### Pages (the older, simpler flow)
+
+**Workers & Pages → Create → Pages → Connect to Git**, then:
+
+- **Framework preset:** `None`
+- **Build command:** *empty* (if the form insists on something, `exit 0`)
+- **Build output directory:** `public`
+
+There is no deploy command in this flow — deployment is the part Cloudflare does
+for you.
+
+### Either way
+
+Deploy, and you get a `*.pages.dev` or `*.workers.dev` URL to check immediately.
+Then **Custom domains** → add `glanceneuro.org` and `www.glanceneuro.org`. Since
+the domain is already in your Cloudflare account, the DNS records are created for
+you: no A records to copy, no TLS to configure.
 
 Every push to `main` redeploys. Pull requests get their own preview URL.
 

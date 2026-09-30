@@ -1,0 +1,14 @@
+{
+  // Cloudflare's repo-import flow now defaults to WORKERS rather than Pages, and
+  // a Worker needs this file -- without it `npx wrangler deploy` has nothing to
+  // deploy. There is no Worker code here: `assets` alone makes it a static site,
+  // which is all a landing page needs.
+  //
+  // Serving ./public rather than the repo root is deliberate: it keeps README.md
+  // and this config file off the public site.
+  "name": "glance-neuro-website",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public"
+  }
+}

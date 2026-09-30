@@ -189,10 +189,13 @@ footer p{max-width:60ch}
 </header>
 
 <figure class="board">
-  <img src="board.jpg" loading="lazy" decoding="async"
-       alt="The GLANCE carrier board: a green PCB with the owl logo in white
-            silkscreen, with a MicroZed system-on-module seated on top carrying
-            the Zynq-7020 chip, gigabit Ethernet, USB-C and two SMA connectors.">
+  <picture>
+    <source srcset="board.webp" type="image/webp">
+    <img src="board.jpg" width="1600" height="1122" loading="lazy" decoding="async"
+         alt="The GLANCE carrier board: a green PCB with the owl logo in white
+              silkscreen, with a MicroZed system-on-module seated on top carrying
+              the Zynq-7020 chip, gigabit Ethernet, USB-C and two SMA connectors.">
+  </picture>
   <figcaption>A MicroZed seated on the GLANCE carrier. Gigabit Ethernet and
   USB-C on the left; the two SMA connectors are the stimulus outputs.</figcaption>
 </figure>
