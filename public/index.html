@@ -202,6 +202,17 @@ ul.feat b{font-weight:640}
 }
 
 /* ---------- acknowledgements ---------- */
+ul.awards{
+  margin:14px 0 0;padding:0 0 0 22px;max-width:68ch;
+  /* Single column deliberately. CSS columns split on available WIDTH, not on
+     item count, so with three entries they produced a lopsided 2-and-1 rather
+     than waiting until the list was long enough to need splitting. When this
+     does grow to dozens, add `columns:32ch;column-gap:36px` here -- one line,
+     and better decided when the real length is known. */
+}
+ul.awards li{margin:0 0 7px;break-inside:avoid}
+ul.awards li::marker{color:var(--navy)}
+
 .funders{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
   gap:clamp(22px,4vw,46px);margin-top:28px;padding:24px clamp(18px,4vw,34px);
@@ -401,18 +412,25 @@ footer p{max-width:60ch}
 
 <section>
   <h2>Acknowledgements</h2>
-  <p>GLANCE is supported by the <strong>Army Research Office</strong>, and by the
-  National Institutes of Health — the <strong>National Institute of Neurological
-  Disorders and Stroke</strong> under award
-  <a href="https://reporter.nih.gov/project-details/11319945">R01NS147469</a>, and
-  the <strong>National Institute of Mental Health</strong> under award
-  <a href="https://reporter.nih.gov/project-details/11247943">R01MH139216</a>.</p>
-  <!-- RePORTER links use the short /project-details/<appl_id> form rather than
-       the /search/<token>/project-details/<id> form the site hands you: the
-       token is tied to a search session, the short form is not. Both verified
-       200, and the award-to-id mapping was confirmed against the RePORTER API
-       rather than assumed. If an ARO award number should be cited too, it goes
-       after "Army Research Office". -->
+  <p>GLANCE is supported by:</p>
+
+  <!-- A LIST, not a sentence, because this is meant to grow. Adding a funder is
+       one <li>; award numbers go in parentheses and link to the award record
+       where there is one. The CSS flows it into columns once it is long enough
+       to need them, so nothing here has to change as entries accumulate.
+
+       RePORTER links use the short /project-details/<appl_id> form rather than
+       the /search/<token>/project-details/<id> URLs the site hands you when
+       browsing: that token is tied to a search session. Both return 200; the
+       short one has nothing to go stale. The award-to-id mapping was checked
+       against the RePORTER API rather than assumed. -->
+  <ul class="awards">
+    <li>Army Research Laboratory</li>
+    <li>National Institute of Neurological Disorders and Stroke
+        (<a href="https://reporter.nih.gov/project-details/11319945">R01NS147469</a>)</li>
+    <li>National Institute of Mental Health
+        (<a href="https://reporter.nih.gov/project-details/11247943">R01MH139216</a>)</li>
+  </ul>
 
   <div class="funders">
     <img src="funder-army.png" width="330" height="88" loading="lazy"
