@@ -155,6 +155,18 @@ ul.feat b{font-weight:640}
   margin-top:12px;display:block;letter-spacing:.03em;
 }
 
+/* ---------- acknowledgements ---------- */
+.funders{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:clamp(22px,4vw,46px);margin-top:28px;padding:24px clamp(18px,4vw,34px);
+  /* Deliberately a light panel in BOTH themes. These are official agency marks,
+     dark artwork on transparency -- on the dark ground they would be close to
+     invisible, and recolouring someone's seal is not ours to do. */
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+}
+.funders img{height:44px;width:auto;display:block}
+@media (max-width:420px){ .funders img{height:36px} }
+
 /* ---------- footer ---------- */
 footer{
   margin-top:clamp(60px,9vw,104px);border-top:1px solid var(--line);
@@ -266,6 +278,30 @@ footer p{max-width:60ch}
     </a>
 
   </div>
+</section>
+
+<section>
+  <h2>Acknowledgements</h2>
+  <p>GLANCE is supported by the <strong>Army Research Office</strong>, and by the
+  <strong>National Institute of Neurological Disorders and Stroke</strong> and the
+  <strong>National Institute of Mental Health</strong> of the National Institutes
+  of Health.</p>
+  <!-- Funders normally require specific award numbers in an acknowledgement.
+       Add them to the sentence above, e.g. "under award W911NF-XX-X-XXXX" and
+       "under awards R01NSXXXXXX and R01MHXXXXXX". -->
+
+  <div class="funders">
+    <img src="funder-army.png" width="330" height="88" loading="lazy"
+         alt="U.S. Army DEVCOM Army Research Laboratory">
+    <img src="funder-ninds.png" width="383" height="88" loading="lazy"
+         alt="National Institute of Neurological Disorders and Stroke">
+    <img src="funder-nimh.svg" width="334" height="88" loading="lazy"
+         alt="National Institute of Mental Health">
+  </div>
+
+  <p style="font-size:14.5px;color:var(--ink2);margin-top:18px">The content is
+  solely the responsibility of the authors and does not necessarily represent the
+  official views of the funding agencies.</p>
 </section>
 
 <footer>
